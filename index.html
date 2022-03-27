@@ -6,9 +6,20 @@
 		<title>AKU boligere visualiseret</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
 		<link rel="stylesheet" href="https://cdn.rawgit.com/Viglino/ol-ext/master/dist/ol-ext.min.css" />
+		<style>
+			html {
+				width: 100%;
+				height: 100%;
+			}
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+			}
+		</style>
 	</head>
 	<body>
-		<div id="map" class="map" style="width: 600px; height: 600px"></div>
+		<div id="map" class="map" style="width:100%; height: 100%"></div>
 		<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
 		<script type="text/javascript" src="https://cdn.rawgit.com/Viglino/ol-ext/master/dist/ol-ext.min.js"></script>
 		<script src="script.js"></script>
