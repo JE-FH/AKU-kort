@@ -24,7 +24,7 @@ async function main() {
 		}),
 		overlays: [popup]
 	});
-	let data = await (await fetch("/data/combined.json")).json();
+	let data = await (await fetch("data/combined.json")).json();
 
 	let features = [];
 	for (let bolig of data.data) {
