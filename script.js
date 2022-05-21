@@ -24,7 +24,7 @@ function createPopup(bolig) {
 }
 
 async function main() {
-	let data = await (await fetch("data/combined.json")).json();
+	let data = await (await fetch("data/combined.json?v=2")).json();
 
 	var map = L.map('map').setView([57.036, 9.93], 12);
 

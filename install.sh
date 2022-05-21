@@ -14,4 +14,4 @@ echo "Installing into $1"
 
 cp index.html "$1/index.html"
 cp script.js "$1/script.js"
-cp -rf data "$1/data"
+cp -rf data "$1/"
