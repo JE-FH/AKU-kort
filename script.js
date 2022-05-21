@@ -11,7 +11,7 @@ function createPopup(bolig) {
 	let previewImage = document.createElement("img");
 	previewImage.style.width = "160px";
 	previewImage.style.margin = "0 auto"
-	previewImage.src = `/data/img/bolig-${bolig.id}.jfif`;
+	previewImage.src = `data/img/bolig-${bolig.id}.jfif`;
 	container.appendChild(previewImage);
 	
 	let visitLink = document.createElement("a");
