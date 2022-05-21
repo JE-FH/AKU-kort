@@ -2,9 +2,11 @@ const fs = require("fs/promises");
 const path = require("path");
 async function main() {
 	let files = await Promise.all((await fs.readdir("data/"))
-		.filter((x) => x != "combined.json")
+		.filter((x) => x != "combined.json" && x.endsWith(".json"))
 		.map((x) => path.join("data/", x))
-		.map(async (x) => JSON.parse(await fs.readFile(x, "utf-8"))));
+		.map(async (x) => {
+			return JSON.parse(await fs.readFile(x, "utf-8"))
+		}));
 	
 	let combined = []
 	for (let file of files) {

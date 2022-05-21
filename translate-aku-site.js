@@ -10,7 +10,7 @@ function lookupAddress(address) {
 	return fetch(url, {
 		headers: {
 			"Referer": "https://jens.ovh/",
-			"User-Agent": "Aalborg boligere kort / 0.1"
+			"User-Agent": "Aalborg boligere kort / 0.2"
 		}
 	})
 		.then((response) => response.json())
@@ -41,11 +41,16 @@ async function parseEjendomme($) {
 		let rigtig_addresse = raw_addresse.split(/[\n\t]/g).filter((x) => x.length > 0).join(", ");
 		let søgbar_addresse = cleanAddress(raw_addresse);
 		let link = `https://vl.aku-aalborg.dk/${$(element).find("div>div>a")[0].attribs.href}`;
+		let image_link = `https://vl.aku-aalborg.dk/${$(element).find("div>div>a>img")[0].attribs.src}`;
+        let id = link.match(/([0-9]+)$/)[0];
+		
 		rv.push({
 			navn: $(element).find("div.overskrift").text().replace(/[\t\n\r]/g, "").trim(),
 			link: link,
 			rigtig_addresse,
-			søgbar_addresse
+			søgbar_addresse,
+			image_link,
+			id: id
 		});
 	});
 
@@ -53,7 +58,7 @@ async function parseEjendomme($) {
 		//We can only lookup one address every second to avoid being blocked by the API, so we need to send them slow
 		rv[i].lonlat = await lookupAddress(rv[i].søgbar_addresse);
 		console.log(`${i + 1}/${rv.length}`);
-		await new Promise((resolve) => setTimeout(resolve, 2000));
+		await new Promise((resolve) => setTimeout(resolve, 1500));
 	}
 	
 	return rv;

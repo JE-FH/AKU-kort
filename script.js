@@ -1,61 +1,43 @@
 //Create a map using OpenLayers
-async function main() {
-	// Popup overlay
-	var popup = new ol.Overlay.Popup ({
-		popupClass: "default", //"tooltips", "warning" "black" "default", "tips", "shadow",
-		closeBox: true,
-		onshow: function(){  },
-		onclose: function(){ },
-		positioning: 'auto',
-		autoPan: true,
-		autoPanAnimation: { duration: 250 }
-	});
+function createPopup(bolig) {
+	let container = document.createElement("div");
+	container.style.textAlign = "center";
+	
+	let title = document.createElement("h3");
+	title.appendChild(document.createTextNode(bolig.navn));
+	
+	container.appendChild(title);
+	
+	let previewImage = document.createElement("img");
+	previewImage.style.width = "160px";
+	previewImage.style.margin = "0 auto"
+	previewImage.src = `/data/img/bolig-${bolig.id}.jfif`;
+	container.appendChild(previewImage);
+	
+	let visitLink = document.createElement("a");
+	visitLink.href = bolig.link;
+	visitLink.classList.add("visit-button")
+	visitLink.appendChild(document.createTextNode("Visit"));
+	container.appendChild(visitLink);
 
-	var map = new ol.Map({
-		target: 'map',
-		layers: [
-			new ol.layer.Tile({
-			source: new ol.source.OSM()
-		  })
-		],
-		view: new ol.View({
-			center: ol.proj.fromLonLat([9.93, 57.036]),
-			zoom: 12
-		}),
-		overlays: [popup]
-	});
+	return container;
+}
+
+async function main() {
 	let data = await (await fetch("data/combined.json")).json();
 
-	let features = [];
+	var map = L.map('map').setView([57.036, 9.93], 12);
+
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
 	for (let bolig of data.data) {
 		if (bolig.lonlat != null) {
-			let feature = new ol.Feature({
-				geometry: new ol.geom.Point(ol.proj.fromLonLat([bolig.lonlat[0], bolig.lonlat[1]]))
-			})
-			feature.set("boligData", bolig);
-			feature.set("asfdkgoakdfosadkf", bolig.link);
-			features.push(feature);
+			L.marker([bolig.lonlat[1], bolig.lonlat[0]]).addTo(map)
+	    		.bindPopup((layer) => createPopup(bolig));
 		}
 	}
-
-	var layer = new ol.layer.Vector({
-		source: new ol.source.Vector({
-			features: features
-		})
-	});
-	map.addLayer(layer);
-
-	var select = new ol.interaction.Select({});
-	map.addInteraction(select);
-	select.getFeatures().on(['add'], function(e) {
-		var feature = e.element;
-		console.log(feature.get("boligData"));
-		var content = `${feature.get("boligData").navn}<a href="${encodeURI(feature.get("boligData").link)}"><br>visit</a>`;
-		popup.show(feature.getGeometry().getFirstCoordinate(), content); 
-	});
-	select.getFeatures().on(['remove'], function(e) {
-		popup.hide(); 
-	})
 }
 
 
